@@ -14,32 +14,25 @@ export default function LoginForm() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/api/auth/login", form);
-      console.log("Login DONE"); // 🔑 backend API
-      const { token, user } = res.data;
-
-      // save token in localStorage
-      localStorage.setItem("token", token);
-
-      // update context
-      // login({ ...user, token });
-      // store token in localStorage
-      // localStorage.setItem("certisure_token", token);
-
-      // manually update AuthContext user
-      setToken(token);
-      setUser(user);  // you need to import `setUser` from AuthContext
-
-
-      // redirect according to userType
-      if (user.role === "student") navigate("/student/dashboard/");
-      else if (user.role === "employer") navigate("/dashboard/employer");
-      else if (user.role === "university") navigate("/dashboard/university");
+         // Use the login function from AuthContext instead of manual handling
+      const result = await login(form.email, form.password);
+      
+      if (result.success) {
+        console.log("Login successful");
+        
+        // Redirect based on user role
+        const userRole = result.user?.role || form.role;
+        
+        if (userRole === "student") navigate("/student/dashboard");
+        else if (userRole === "employer") navigate("/employer/dashboard");
+        else if (userRole === "university") navigate("/university/dashboard");
+      } else {
+        setError(result.error || "Login failed!");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed!");
     }
-  };
-
+  }
   return (
     <div className="w-full max-w-md bg-white/70 backdrop-blur-lg p-8 rounded-2xl shadow-xl">
       <h2 className="text-2xl font-bold text-indigo-700 mb-4">Login</h2>

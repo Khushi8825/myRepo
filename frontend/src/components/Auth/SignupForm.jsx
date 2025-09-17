@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../api";
 
 export default function SignupForm() {
-  const { login } = useAuth();
+  const { signup, login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -17,22 +17,28 @@ export default function SignupForm() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/api/auth/signup", form);
-      console.log("Signup Done");
-      const { token, user } = res.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      login(user.email, form.password);
-
-      if (user.role === "student") navigate("/dashboard/student");
-      else if (user.role === "employer") navigate("/dashboard/employer");
-      else if (user.role === "university") navigate("/dashboard/university");
+   // Use the signup function from AuthContext
+      const result = await signup(form);
+      
+      if (result.success) {
+        console.log("Signup successful");
+        
+        // After successful signup, automatically log the user in
+        const loginResult = await login(form.email, form.password);
+        
+        if (loginResult.success) {
+          // Redirect based on role
+          if (form.role === "student") navigate("/student/dashboard");
+          else if (form.role === "employer") navigate("/employer/dashboard");
+          else if (form.role === "university") navigate("/university/dashboard");
+        } else {
+          setError("Signup successful but login failed: " + loginResult.error);
+        }
+      } else {
+        setError(result.error || "Signup failed!");
+      }
     } catch (err) {
-      console.error("Signup Error:", err); // <-- logs full error object
-      console.error("Response Data:", err.response?.data); // <-- logs backend response
-      console.error("Status:", err.response?.status);
+      console.error("Signup Error:", err);
       setError(err.response?.data?.message || "Signup failed!");
     }
   };

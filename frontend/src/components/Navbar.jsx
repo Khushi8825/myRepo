@@ -8,7 +8,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const rolePrefix = user?.userType?.toLowerCase();
+  const rolePrefix = user?.role?.toLowerCase();
 
   const handleLogout = () => {
     logout();

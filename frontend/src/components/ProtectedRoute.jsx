@@ -16,7 +16,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && user.userType !== requiredRole) {
+  if (requiredRole && user.role !== requiredRole) {
     // If user doesn't have the required role, redirect to their own dashboard
     return <Navigate to={`/${user.userType}/dashboard`} replace />;
   }

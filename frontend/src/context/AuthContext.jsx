@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const userData = await response.json();
+        console.log("verified user", userData);
         setUser(userData);
       } else {
         // Token is invalid
@@ -57,13 +58,13 @@ export function AuthProvider({ children }) {
       if (response.ok) {
         const data = await response.json();
         const { user: userData, token: authToken } = data;
-        
+        console.log("login user data", userData);
         // Store token and user data
         localStorage.setItem("token", authToken);
         setToken(authToken);
         setUser(userData);
         
-        return { success: true };
+        return { success: true, user:userData };
       } else {
         const errorData = await response.json();
         return { success: false, error: errorData.message };

@@ -13,7 +13,7 @@ const signup = async (req, res) => {
     const newUser = await createUser(name, email, hashedPassword, role);
 
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, role: newUser.role },
+      { id: newUser.id,name:newUser.name, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -35,7 +35,7 @@ const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

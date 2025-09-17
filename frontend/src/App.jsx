@@ -179,9 +179,9 @@ function DashboardRedirect() {
   const { user } = useAuth();
 
   if (!user) return <Navigate to="/login" replace />;
-  if (user.userType === "student") return <Navigate to="/student/dashboard" replace />;
-  if (user.userType === "employer") return <Navigate to="/employer/dashboard" replace />;
-  if (user.userType === "university") return <Navigate to="/university/dashboard" replace />;
+  if (user.role === "student") return <Navigate to="/student/dashboard" replace />;
+  if (user.role === "employer") return <Navigate to="/employer/dashboard" replace />;
+  if (user.role === "university") return <Navigate to="/university/dashboard" replace />;
 
   return <Navigate to="/login" replace />;
 }
