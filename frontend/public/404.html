@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CertiSure</title>
+    <script>
+      // Redirect to homepage for any 404 errors (page refresh)
+      sessionStorage.redirect = location.href;
+      location.replace('/');
+    </script>
+  </head>
+  <body>
+    <noscript>Please enable JavaScript to use CertiSure</noscript>
+    <div id="root"></div>
+  </body>
+</html>
